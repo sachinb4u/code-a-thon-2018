@@ -1,0 +1,21 @@
+CPU Utilization	
+   0 value < 1
+   indicates system CPU utilization. Higher CPU utilization indicates system is under stress and needs attention
+   
+Free Heap Percent	
+  0 < value < 1
+  
+JVM Old Generation Used Percent	
+  0 < value < 1
+  
+Free Disk Space percent	
+  0 < value < 1
+  
+Average Response Time (ms)	
+  0 < value
+  
+Log Volume Usage Percent	
+  0 < value < 1
+  
+Unprocessed DurableEvent
+  0 <

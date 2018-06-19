@@ -1,0 +1,66 @@
+CIRS DETECTOR
+ROOT CAUSE DETECTOR
+TRIGGERS THE INPUT INTO A MACHINE LEARNING MODEL
+
+
+Uncaught exception in UI.
+
+1.	IMS-909
+Email Approvals Taking/Hours Days to Approve Documents
+
+Ariba mail server, backlog in mail queue
+
+
+
+We see the statements like
+
+“So we are down significantly since last week but we still have quite a few documents that they are going to need processed before the end of the day to close year end.  For example, there are 9 invoices still stuck in Approved dating back to last thursday - total amount being held up is 536,535.762.” ref: https://product-jira.ariba.com/browse/IMS-905
+
+We can do a lot of automation of the intelligence.
+
+
+If response times in cloud health goes beyond limits.
+If splunk says org.apache.http.NoHttpResponseException
+
+ 
+Mimic memory consumption increase (in a taskcxml node ) and trigger an event.
+
+1.	Incidents
+2.	IMS-899
+Mon database rejecting connection
+
+Log volume usage increased from 10% to 100% in 1-hour
+Root Cause: MONPRO1 log volume increase from 10% to 100% in one hour
+ 
+Restoration Efforts: MONPRO1 rejecting connection
+
+Restoration Efforts: DBA stopped data import and cleaned some log files.
+/dev/vx/dsk/ora07dg/ora07log02
+100G 98G 2.4G 98% /ora07log02
+
+1.	Incidents
+2.	IMS-905 
+DurableEvents Not Processing
+
+Select count(), UniqueName, this.Action From DurableEvent Group By UniqueName, this.Action union Select count() , Total , Total From DurableEvent
+OR
+Select count(), UniqueName, this.Action From DurableEvent
+Group By UniqueName, this.Action
+union
+Select count() , 'Total', 'Total'
+From DurableEvent
+count()
+UniqueName
+this."Action"
+
+
+Both task nodes restarted several times in past two days.
+Today alone there have been 10 OutOfMemoryExceptions with 4 being in the past hour alone:
+Spoke with Nathan, looks like the CPU saturation for Smuckers task node 1 is pretty high. There looks to be ~32 second delay on anything
+
+
+
+Turnaround time,
+Revenue savings.
+Engineering time
+NPS improvement
