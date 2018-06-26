@@ -6,35 +6,29 @@ import pandas as pd
 import json
 import pickle
 from training import Preprocessor
+import warnings
+
+warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
 
-incidentLabels = ['NoIssue', 'DBConnectionIssue', 'InvoiceIssue', 'OrderIssue', 'CommunityIssue',
-                 'WorkspaceIssue' , 'NetworkIssue', 'CommunityHealthIssue' ]
+incidentCodeToTypes  =  {0: 'NetworkIssue', 1: 'NoIssue', 2: 'DatabaseConnection', 3: 'CommunityHealthIssue', 4: 'Community-FromtDoorNotaccessible', 5: 'InvoiceIssue', 6: 'UnsearchableWorkspaces', 7: 'DataLoad Failure'}
 
-incidentTypesDict = {'NoIssue' : 0, 'DBConnectionIssue' :1, 'InvoiceIssue' :2, 
-                     'OrderIssue' :3,  'CommunityIssue' :4, 'WorkspaceIssue' :5 ,
-                     'NetworkIssue' :6, 'CommunityHealthIssue':7 }
-
-incidentCodeToTypes = {0 :'NoIssue' , 1: 'DBConnectionIssue', 2: 'InvoiceIssue', 
-                     3: 'OrderIssue', 4: 'CommunityIssue', 5: 'WorkspaceIssue',
-                     6: 'NetworkIssue', 7: 'CommunityHealthIssue' }
-
-filename = 'model_v1.pk'
-model = None
+# Define model filename
+filename = 'model_v3.pk'
 
 @app.route("/predict", methods=['POST'])
 def predict_handler():
     
     try:
         req_json = request.get_json()
-        print('Request JSON = \n', req_json)
+        
         req_json = str(req_json).replace("'", '"')
-        print('Request JSON Updated= \n', req_json)
+        print('Request JSON: \n', req_json)
         
         reqDf = pd.read_json(req_json)
-        
-        print(reqDf)
+        print('Incoming Request Dataframe: \n', reqDf) 
+
         
     except Exception as e:
         raise e
@@ -47,6 +41,7 @@ def predict_handler():
         testX = preprocess.transform(reqDf)
         print('Request test for prediction \n', testX)
         
+        print('Request shape = ', str(testX.shape))
         predictions = model.predict(testX)
         print('Prediction = \n' , predictions)
         
@@ -70,16 +65,15 @@ def bad_request():
     return response1
 
 def load_model():
-    model_filename = 'model_v1.pk'
+    
     with open('models/'+filename ,'rb') as f:
         loaded_model = pickle.load(f)
-        
+    
+    print("The ML model has been loaded and ready for predictions.")
     return loaded_model
 
-if __name__ == "__main__" :
-    # load model at startup
-    model = load_model()
-    print("The ML model has been loaded and ready for predictions.")
-    app.run(debug=True)
+
+model = load_model()
+
     
-# app.run(debug=True)
+app.run(debug=True)

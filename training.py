@@ -15,12 +15,16 @@ class Preprocessor(BaseEstimator, TransformerMixin):
         pass
     
     def transform(self, df):
+
+        exceptionTypes  =  {'spanning tree event': 0, 'NA': 1, 'JDBC-connection-permit-failure': 2, '[AWGenericException: java.lang.IllegalStateException, Export-webservice-ConnectionTimeout]': 3, '[ScheduledTsak-ArchesBatchPublishInThisRealm-Failure, Arches Schema version mismatch]': 4, '[OutOfMemoryException, GT Nodes restarting]': 5} 
+
+        cloudHealthValues  =  {'FAIR': 0, 'GOOD': 1, 'POOR': 2, 'NA': 3, 'CRITICAL': 4} 
+
+        features_vars  =  ['Date', 'AvgBackgroundQ', 'AvgThreadPoolSize', 'AvgWorkflowQ', 'CatalogSearchTime', 'IncreasingBGQueueTrend', 
+                           'IncreasingThreadTrend', 'IncreasingWFQueueTrend', 'Exception', 'LogSizeVolumePercent', 'NetworkConnectivitySNV-US1', 
+                           'IsProductReleased', 'UiNodeThreadsCount', 'CloudHealthIndex'] 
         
-        pred_vars = ['AvgBackgroundQ', 'AvgThreadPoolSize', 'AvgWorkflowQ',
-       'CatalogSearchTime', 'CloudHealthIndex', 'Date', 'IsProductReleased',
-        'LogSizeVolumePercent', 'NetworkConnectivitySNV-US1', 'UiNodeThreadsCount']
-        
-        df = df[pred_vars]
+        df = df[features_vars]
         
         # Make all negative values to NaN so that it can be replaced with single value
         df['AvgBackgroundQ'][df['AvgBackgroundQ'] < 1] = np.NAN
@@ -48,10 +52,9 @@ class Preprocessor(BaseEstimator, TransformerMixin):
                      }), axis = 1)
         
         df = pd.concat([df, df1], axis=1)
-        
-        cloudHealthValues = {'FAIR' : 0, 'GOOD' : 1, 'CRITICAL' : 2}
 
         df.replace({'CloudHealthIndex': cloudHealthValues}, inplace=True)
+        df.replace({'Exception': exceptionTypes}, inplace=True)
         
         df = df[df.columns.drop(['Date'])]
         return df  #.as_matrix()
@@ -59,4 +62,4 @@ class Preprocessor(BaseEstimator, TransformerMixin):
     def fit(self, df, y=None, **fit_params):
         
         return self;
-  
+ 
