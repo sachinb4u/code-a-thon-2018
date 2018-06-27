@@ -50,7 +50,7 @@ def predict_handler():
         
         predDf = pd.DataFrame(data=predictions, columns=['code'])        
         predDf['name'] = predDf['code'].replace(to_replace=incidentCodeToTypes)
-        
+
         print('PredictionDF = \n' , predDf)
 
         jsonResp = predDf.to_json(orient='records')
@@ -83,5 +83,4 @@ def load_model():
 # load the model at startup
 model = load_model()
 
-
-app.run(debug=True)
+app.run(host='0.0.0.0', debug=True)
