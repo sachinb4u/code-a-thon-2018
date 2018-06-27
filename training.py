@@ -6,7 +6,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 
 
-class Preprocessor(BaseEstimator, TransformerMixin):
+class IncidentPreprocessor(BaseEstimator, TransformerMixin):
     """Custom Preprocessing Estimator for the custom case
     
     """

@@ -5,8 +5,9 @@ from flask import jsonify
 import pandas as pd
 import json
 import pickle
-from training import Preprocessor
+from training import IncidentPreprocessor
 import warnings
+from sklearn.externals import joblib
 
 warnings.filterwarnings("ignore")
 
@@ -14,8 +15,7 @@ app = Flask(__name__)
 
 incidentCodeToTypes  =  {0: 'NetworkIssue', 1: 'NoIssue', 2: 'DatabaseConnection', 3: 'CommunityHealthIssue', 4: 'Community-FromtDoorNotaccessible', 5: 'InvoiceIssue', 6: 'UnsearchableWorkspaces', 7: 'DataLoad Failure'}
 
-# Define model filename
-filename = 'model_v3.pk'
+
 
 @app.route("/predict", methods=['POST'])
 def predict_handler():
@@ -36,13 +36,16 @@ def predict_handler():
     if reqDf.empty :
         return (bad_request())
     else:
-        preprocess = Preprocessor()
+        preprocess = IncidentPreprocessor()
         
-        testX = preprocess.transform(reqDf)
-        print('Request test for prediction \n', testX)
+        # transform request to DF if not Grid model
+#         testX = preprocess.transform(reqDf)
+#         print('Request test for prediction \n', testX, ' shape = ', str(testX.shape))
         
-        print('Request shape = ', str(testX.shape))
-        predictions = model.predict(testX)
+#         model = load_model()
+        
+        # pass the req dataframe without transformation as it would hapen in pipeline
+        predictions = model.predict(reqDf)
         print('Prediction = \n' , predictions)
         
         predDf = pd.DataFrame(data=predictions, columns=['code'])        
@@ -65,15 +68,20 @@ def bad_request():
     return response1
 
 def load_model():
-    
-    with open('models/'+filename ,'rb') as f:
-        loaded_model = pickle.load(f)
+    # Define model filename
+#     filename1 = 'models/model_random_forest_v1.pk'
+#     with open(filename1 ,'rb') as f:
+#         loaded_model = pickle.load(f)
+
+    filename2 = 'models/model_random_forest_v2.pk'
+    loaded_model = joblib.load(filename2)
     
     print("The ML model has been loaded and ready for predictions.")
     return loaded_model
 
 
+# load the model at startup
 model = load_model()
 
-    
+
 app.run(debug=True)
