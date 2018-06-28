@@ -73,7 +73,7 @@ def load_model():
 #     with open(filename1 ,'rb') as f:
 #         loaded_model = pickle.load(f)
 
-    filename2 = 'models/model_random_forest_v2.pk'
+    filename2 = 'models/model_xgb_v1.mod'
     loaded_model = joblib.load(filename2)
     
     print("The ML model has been loaded and ready for predictions.")
